@@ -38,12 +38,13 @@ var jsonTarget = function() {
   for (var rowI=1; rowI<data.length-1; rowI++){
     var row = data[rowI].split(",");
     for (var column=rowI; column<row.length-1; column++){
-      json+='{"source":' +(rowI-1)+',"target":'+(column-1)+',"weight":'+row[column]+'},'
+      json+='{"source":' +(rowI)+',"target":'+(column)+',"weight":'+row[column]+'},'
       json+="\n"
     }
     fs.writeFileSync("somejson.txt", json, "utf8")
   }
 }
+
 
 var data = (fs.readFileSync("somejson.txt", "utf8")).split("\n");
 var newtxt =""

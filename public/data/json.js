@@ -14,14 +14,14 @@ var csvFunction = function() {
   json=" ,"
   json+=getNames().toString()
   json+="\n"
-  
+
   for (var i = 0; i <data.length; i++){
     var row = data[i].split(",");
     var new_array = [];
     for(var empty = 0; empty<i; empty++){
       new_array.push(" ");
     }
-    
+
     for (var j=i; j<data.length; j++){
       var count=0;
       var check_row = data[j].split(",");
@@ -29,10 +29,10 @@ var csvFunction = function() {
         for (var index2 = 1; index2<check_row.length; index2++){
           if (row[index1] == check_row[index2]){
             if (check_row[index2] == null||check_row[index2] ==""|| check_row[index2]==" "){
-              
+
             } else {
               count++;
-            }    
+            }
           }
         }
       }
@@ -74,4 +74,4 @@ var jsonFormatting = function() {
 
 // csvFunction()
 // jsonTarget()
-// jsonFormatting()
+jsonFormatting()

@@ -11,14 +11,14 @@ var getNames = function(){
 
 var csvFunction = function() {
   var data = (fs.readFileSync("data.csv", "utf8")).split("\n");
-  json=""
+  json=" ,"
   json+=getNames().toString()
   json+="\n"
   
-  for (var i = 1; i <data.length; i++){
+  for (var i = 0; i <data.length; i++){
     var row = data[i].split(",");
     var new_array = [];
-    for(var empty = 0; empty<i-1; empty++){
+    for(var empty = 0; empty<i; empty++){
       new_array.push(" ");
     }
     
@@ -28,7 +28,11 @@ var csvFunction = function() {
       for (var index1 = 1; index1<row.length; index1++){
         for (var index2 = 1; index2<check_row.length; index2++){
           if (row[index1] == check_row[index2]){
-            count++;
+            if (check_row[index2] == null||check_row[index2] ==""|| check_row[index2]==" "){
+              
+            } else {
+              count++;
+            }    
           }
         }
       }
@@ -45,7 +49,7 @@ var jsonTarget = function() {
   var json= "";
   for (var rowI=1; rowI<data.length; rowI++){
     var row = data[rowI].split(",");
-    for (var column=rowI; column<row.length-1; column++){
+    for (var column=rowI; column<row.length; column++){
       json+='{"source":' +(rowI)+',"target":'+(column)+',"cost":'+row[column]+'},'
       json+="\n"
     }

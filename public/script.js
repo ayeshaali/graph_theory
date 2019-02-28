@@ -1,52 +1,54 @@
-//variables
-var width = 960,
-    height = 500
+var margin = {top: 10, right: 30, bottom: 30, left: 40},
+  width = 500 - margin.left - margin.right,
+  height = 500 - margin.top - margin.bottom;
 
-//set up svg
-var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height);
+var svg = d3.select("#my_dataviz")
+  .append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-//set up force
-var force = d3.layout.force()
-    .gravity(.05)
-    .distance(100)
-    .charge(-100)
-    .size([width, height]);
+d3.json("graphFile.json", function( data) {
+  // Initialize the links
+  var link = svg
+    .selectAll("line")
+    .data(data.links)
+    .enter()
+    .append("line")
+    .style("stroke", "#000")
 
-//use json file
-d3.json("graphFile.json", function(json) {
-  force
-      .nodes(json.nodes)
-      .links(json.links)
-      .start();
+  // Initialize the nodes
+  var node = svg
+    .selectAll("circle")
+    .data(data.nodes)
+    .enter()
+    .append("circle")
+    .attr("r", 5)
+    .style("fill", "#69b3a2")
 
-  var link = svg.selectAll(".link")
-      .data(json.links)
-      .enter().append("line")
-      .attr("class", "link")
-      .style("stroke-width", function(d) { return Math.sqrt(d.weight); });
+  // Let's list the force we wanna apply on the network
+  var simulation = d3.forceSimulation(data.nodes)                 // Force algorithm is applied to data.nodes
+      .force("link", d3.forceLink()                               // This force provides links between nodes
+            .id(function(d) { return d.group; })                     // This provide  the id of a node
+            .links(data.links)                                    // and this the list of links
+      )
+      .force("charge", d3.forceManyBody().strength(-400))         // This adds repulsion between nodes. Play with the -400 for the repulsion strength
+      .force("center", d3.forceCenter(width / 2, height / 2))     // This force attracts nodes to the center of the svg area
+      .on("end", ticked);
 
-  var node = svg.selectAll(".node")
-      .data(json.nodes)
-      .enter().append("g")
-      .attr("class", "node")
-      .call(force.drag);
-
-  node.append("circle")
-      .attr("r","5");
-
-  node.append("text")
-      .attr("dx", 12)
-      .attr("dy", ".35em")
-      .text(function(d) { return d.name });
-
-  force.on("tick", function() {
-    link.attr("x1", function(d) { return d.source.x; })
+  // This function is run at each iteration of the force algorithm, updating the nodes position.
+  function ticked() {
+    link
+        .attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })
         .attr("x2", function(d) { return d.target.x; })
         .attr("y2", function(d) { return d.target.y; });
 
-    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-  });
+    node
+         .attr("cx", function (d) { return d.x+20; })
+         .attr("cy", function(d) { return d.y-20; });
+  }
+
 });
+

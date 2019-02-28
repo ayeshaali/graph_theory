@@ -1,5 +1,6 @@
 var fs = require('fs');
 var getNames = function(){
+  var data = (fs.readFileSync("data.csv", "utf8")).split("\n");
   var names = [];
   for (var i = 0; i<data.length; i++){
     var row = data[i].split(",");
@@ -7,7 +8,13 @@ var getNames = function(){
   }
   return names
 }
+
 var csvFunction = function() {
+  var data = (fs.readFileSync("data.csv", "utf8")).split("\n");
+  json=""
+  json+=getNames().toString()
+  json+="\n"
+  
   for (var i = 1; i <data.length; i++){
     var row = data[i].split(",");
     var new_array = [];
@@ -30,15 +37,16 @@ var csvFunction = function() {
     json+=row[0]+","+new_array.toString();
     json+="\n"
   }
+  fs.writeFileSync("new_data.csv", json, "utf8")
 }
 
 var jsonTarget = function() {
   var data = (fs.readFileSync("new_data.csv", "utf8")).split("\n");
   var json= "";
-  for (var rowI=1; rowI<data.length-1; rowI++){
+  for (var rowI=1; rowI<data.length; rowI++){
     var row = data[rowI].split(",");
     for (var column=rowI; column<row.length-1; column++){
-      json+='{"source":' +(rowI)+',"target":'+(column)+',"weight":'+row[column]+'},'
+      json+='{"source":' +(rowI)+',"target":'+(column)+',"cost":'+row[column]+'},'
       json+="\n"
     }
     fs.writeFileSync("somejson.txt", json, "utf8")
@@ -46,14 +54,20 @@ var jsonTarget = function() {
 }
 
 
-var data = (fs.readFileSync("somejson.txt", "utf8")).split("\n");
-var newtxt =""
-for  (var i = 0; i<data.length; i++){
-  if (data[i].includes('"weight":0')){
-  } else {
-    newtxt+=data[i]+"\n"
+var jsonFormatting = function() {
+  var data = (fs.readFileSync("somejson.txt", "utf8")).split("\n");
+  var newtxt =""
+  for  (var i = 0; i<data.length; i++){
+    if (data[i].includes('"cost":0')){
+    } else {
+      newtxt+=data[i]+"\n"
+    }
   }
+  fs.writeFileSync("new_json.txt", newtxt, "utf8")
 }
-fs.writeFileSync("new_json.txt", newtxt, "utf8")
 
 
+
+// csvFunction()
+// jsonTarget()
+jsonFormatting()

@@ -1,54 +1,162 @@
-var margin = {top: 10, right: 30, bottom: 30, left: 40},
-  width = 500 - margin.left - margin.right,
-  height = 500 - margin.top - margin.bottom;
+var width = 1000,
+    height = 700
 
-var svg = d3.select("#my_dataviz")
-  .append("svg")
-  .attr("width", width + margin.left + margin.right)
-  .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
 
-d3.json("graphFile.json", function( data) {
-  // Initialize the links
-  var link = svg
-    .selectAll("line")
-    .data(data.links)
-    .enter()
-    .append("line")
-    .style("stroke", "#000")
+d3.json("graphFile.json", function(error, json) {
+  if (error) throw error;
+  var force = d3.layout.force()
+    .nodes(json.nodes)
+    .links(json.links)
+    .size([width, height])
+    .gravity(0.08)
+    .linkDistance(function(d) {
+      return (500-d.cost*80)
+    })
+    .linkStrength(1)
+    .charge(-50)
+    .chargeDistance(10)
+    .start();
 
-  // Initialize the nodes
-  var node = svg
-    .selectAll("circle")
-    .data(data.nodes)
-    .enter()
-    .append("circle")
-    .attr("r", 5)
-    .style("fill", "#69b3a2")
+  var link = svg.selectAll(".link")
+      .data(json.links)
+      .enter().append("line")
+      .attr("class", "link");
 
-  // Let's list the force we wanna apply on the network
-  var simulation = d3.forceSimulation(data.nodes)                 // Force algorithm is applied to data.nodes
-      .force("link", d3.forceLink()                               // This force provides links between nodes
-            .id(function(d) { return d.group; })                     // This provide  the id of a node
-            .links(data.links)                                    // and this the list of links
-      )
-      .force("charge", d3.forceManyBody().strength(-400))         // This adds repulsion between nodes. Play with the -400 for the repulsion strength
-      .force("center", d3.forceCenter(width / 2, height / 2))     // This force attracts nodes to the center of the svg area
-      .on("end", ticked);
+  var node = svg.selectAll(".node")
+      .data(json.nodes)
+      .enter().append("g")
+      .attr("class", "node")
+      .call(force.drag)
+      .on("click", function(d){
+        thisNode = d; // where nodeObject is the javascript object for the node, it's probably called "d" in your function.
+        var connectedNodeIds = json.links
+        .filter(x => x.source.id == d.id || x.target.id == d.id)
+        .map(x => x.source.id == d.id ? x.target.id : x.source.id);
+        
+        d3.selectAll(".node")
+        .selectAll("circle")
+        .attr("fill", function(c) {
+          console.log(connectedNodeIds);
+          if (connectedNodeIds.indexOf(c.id) > -1 || c.id == d.id) return "red";
+          else return "green";
+        });
+        
+        var link = d3.selectAll(".link")
+          .data(function(){
+            var newobj = []
+            for(var i=0; i<json.links.length; i++) {
+              if (json.links[i].source === thisNode || json.links[i].target===thisNode) {
+                newobj.push(json.links[i]);
+              }
+            }
+            return newobj;
+          })
+          .exit().remove();
+        
+        link.enter().append("line").attr("class", "link");
+        });
 
-  // This function is run at each iteration of the force algorithm, updating the nodes position.
-  function ticked() {
-    link
-        .attr("x1", function(d) { return d.source.x; })
+  node.append("circle")
+      .attr("r", 6)
+      .attr("fill", "green")
+
+  node.append("text")
+        .attr("dx", 12)
+        .attr("dy", ".35em")
+        .text(function(d) { return d.label })
+        .attr("class","label");
+
+  force.on("tick", function() {
+    link.attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })
         .attr("x2", function(d) { return d.target.x; })
         .attr("y2", function(d) { return d.target.y; });
 
-    node
-         .attr("cx", function (d) { return d.x+20; })
-         .attr("cy", function(d) { return d.y-20; });
-  }
-
+    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+  });
 });
-
+// 
+// var simulation = d3.forceSimulation()
+// .force("charge", d3.forceManyBody().strength(0))
+// .force("link", d3.forceLink().id(function(d) { return d.id; }).distance(200))
+// .force("x", d3.forceX(width/2))
+// .force("y", d3.forceY(height/2))
+// .on("tick", ticked);
+// 
+// var link = svg.selectAll(".link"),
+// node = svg.selectAll(".node");
+// 
+// d3.json("graphFile.json", function(error, graph) {
+//   if (error) throw error;
+// 
+//   simulation.nodes(graph.nodes);
+//   simulation.force("link").links(graph.links);
+// 
+//   link = link
+//   .data(graph.links)
+//   .enter().append("line")
+//   .attr("stroke-width", function(d) { return (d.cost); })
+//   .attr("class", "link");
+// 
+//   node = node
+//   .data(graph.nodes)
+//   .enter().append("g")
+//   .attr("class", "node")
+//   .call(d3.drag())
+//   .on("click", function(d){
+//     thisNode = d; // where nodeObject is the javascript object for the node, it's probably called "d" in your function.
+//     d3.selectAll(".link")
+//       .style("opacity",function(d) {
+//           return d.source === thisNode || d.target === thisNode ? 1 : 0;
+//       });
+//   })
+// 
+//   node.append("circle")
+//       .attr("r", 6)
+//       .style("fill", "green");
+// 
+//   node.append("text")
+//       .attr("dx", 12)
+//       .attr("dy", ".35em")
+//       .text(function(d) { return d.label });
+// 
+//   simulation
+//   .nodes(graph.nodes)
+//   .on("tick", ticked);
+// 
+//   simulation.force("link")
+//   .links(graph.links);    
+// });
+// 
+// function ticked() {
+//   link.attr("x1", function(d) { return d.source.x; })
+//   .attr("y1", function(d) { return d.source.y; })
+//   .attr("x2", function(d) { return d.target.x; })
+//   .attr("y2", function(d) { return d.target.y; });
+// 
+//   node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+//   // node.attr("cx", function(d) { return d.x; })
+//   // .attr("cy", function(d) { return d.y; });
+// }
+// 
+// 
+// 
+// function dragstarted(d) {
+//   if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+//   d.fx = d.x;
+//   d.fy = d.y;
+// }
+// 
+// function dragged(d) {
+//   d.fx = d3.event.x;
+//   d.fy = d3.event.y;
+// }
+// 
+// function dragended(d) {
+//   if (!d3.event.active) simulation.alphaTarget(0);
+//   d.fx = null;
+//   d.fy = null;
+// } 

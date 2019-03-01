@@ -49,8 +49,8 @@ var jsonTarget = function() {
   var json= "";
   for (var rowI=1; rowI<data.length; rowI++){
     var row = data[rowI].split(",");
-    for (var column=rowI; column<row.length; column++){
-      json+='{"source":' +(rowI)+',"target":'+(column)+',"cost":'+row[column]+'},'
+    for (var column=rowI+1; column<row.length; column++){
+      json+='{"source":' +(rowI-1)+',"target":'+(column-1)+',"cost":'+row[column]+'},'
       json+="\n"
     }
     fs.writeFileSync("somejson.txt", json, "utf8")

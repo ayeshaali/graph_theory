@@ -18,7 +18,7 @@ d3.json("graphFile.json", function(error, json) {
     })
     .linkStrength(1)
     .charge(-50)
-    .chargeDistance(10)
+    .chargeDistance(20)
     .start();
 
   var link = svg.selectAll(".link")

@@ -1,5 +1,5 @@
-var width = 1000,
-    height = 700
+var width = $(document).width(),
+    height = 900
 
 var svg = d3.select("body").append("svg")
     .attr("width", width)
@@ -13,6 +13,7 @@ d3.json("graphFile.json", function(error, json) {
     .size([width, height])
     .gravity(0.08)
     .linkDistance(function(d) {
+      console.log(d.source.id+" "+d.target.id+" "+d.cost)
       return (500-d.cost*80)
     })
     .linkStrength(1)

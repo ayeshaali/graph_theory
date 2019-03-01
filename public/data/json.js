@@ -27,15 +27,17 @@ var csvFunction = function() {
       var check_row = data[j].split(",");
       for (var index1 = 1; index1<row.length; index1++){
         for (var index2 = 1; index2<check_row.length; index2++){
-          if (row[index1] == check_row[index2]){
-            if (check_row[index2] == null||check_row[index2] ==""|| check_row[index2]==" "){
-
+          if ((row[index1]).trim() == (check_row[index2]).trim()){
+            if (check_row[index2] == null||check_row[index2]==""|| check_row[index2]==" "){
+              console.log("empty")
             } else {
+              console.log("."+index1+": "+check_row[index2]+".")
               count++;
             }
           }
         }
       }
+      console.log(row[0]+" "+check_row[0]+": "+count);
       new_array.push(count);
     }
     json+=row[0]+","+new_array.toString();

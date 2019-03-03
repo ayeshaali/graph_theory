@@ -38,6 +38,7 @@ d3.json("graphFile.json", function(error, json) {
       .on("click", function(d){
         thisNode = d; // where nodeObject is the javascript object for the node, it's probably called "d" in your function.
         $("#info").html("<h2>"+d.label+"</h2>"); 
+        
         for(var i=0; i<json.links.length; i++) {
           if (json.links[i].source === thisNode && json.links[i].target===thisNode) {
           

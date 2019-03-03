@@ -19,8 +19,8 @@ d3.json("graphFile.json", function(error, json) {
       return (500-d.cost*80)
     })
     .linkStrength(1)
-    .charge(-50)
-    .chargeDistance(20)
+    .charge(-80)
+    .chargeDistance(100)
     .start();
 
   var link = svg.selectAll(".link")
@@ -68,26 +68,20 @@ d3.json("graphFile.json", function(error, json) {
             for(var i=0; i<json.links.length; i++) {
               if (json.links[i].source === thisNode || json.links[i].target===thisNode) {
                 newobj.push(json.links[i]);
-                // console.log(json.links[i]);
               }
             }
             return newobj;
           });
           link.exit().remove();
           
-          // link.enter().append("line");
-          
+          var colors= ["#3D88EE", "#0656D9", "#032470", "#001A50", "#050934"]
           d3.selectAll(".link")
           .attr("class","link")
           .style("stroke-width", function(d){
-            return d.cost;
+            return d.cost*1.5;
           })
           .style("stroke", function(d){
-            if (d.cost>2){
-              return "orange";
-            } else {
-              return "blue";
-            }
+            return colors[d.cost-1];
           })
         });
 
@@ -99,7 +93,10 @@ d3.json("graphFile.json", function(error, json) {
         .attr("dx", 12)
         .attr("dy", ".35em")
         .text(function(d) { return d.label })
-        .attr("class","label");
+        .attr("class","label")
+        .style("font-weight", "100")
+        .style("font-size", "13px")
+        .style("font-variant", "small-caps");
 
   force.on("tick", function() {
     link.attr("x1", function(d) { return d.source.x; })

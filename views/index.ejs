@@ -3,12 +3,25 @@
 <head>
   <title>Networks</title>
   <script src="//d3js.org/d3.v3.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.js"></script>
   <link rel="stylesheet" href="style.css">
  </head>
 
 <body>
+  <button id="reset" onclick="reload_js()">
+    Reset
+  </button>
+  <div id="info">
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.js"></script>
   <script src="//d3js.org/d3.v3.min.js"></script>
-  <script src="script.js"></script>
+  <script id = "scriptJS" src="script.js"></script>
+  <script>
+    function reload_js() {
+      console.log("remove");
+      $('svg').remove();      
+      $('<script>').attr('src', "script.js").appendTo('body');
+    }
+  </script>
  </body>
 </html>

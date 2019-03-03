@@ -1,16 +1,19 @@
-var width = $(document).width(),
-    height = 900
+var width = $(document).width()*.7,
+    height = 800
 
 var svg = d3.select("body").append("svg")
     .attr("width", width)
-    .attr("height", height);
+    .attr("height", height)
+    .style("position", "absolute")
+    .style("top", "9em")
+    .style("border-style", "solid")
 
 d3.json("graphFile.json", function(error, json) {
   if (error) throw error;
   var force = d3.layout.force()
     .nodes(json.nodes)
     .links(json.links)
-    .size([width, height])
+    .size([width-20, height])
     .gravity(0.08)
     .linkDistance(function(d) {
       return (500-d.cost*80)
@@ -34,7 +37,7 @@ d3.json("graphFile.json", function(error, json) {
       .call(force.drag)
       .on("click", function(d){
         thisNode = d; // where nodeObject is the javascript object for the node, it's probably called "d" in your function.
-        $("#info").html("<p>"+d.label+"</p>"); 
+        $("#info").html("<h2>"+d.label+"</h2>"); 
         for(var i=0; i<json.links.length; i++) {
           if (json.links[i].source === thisNode && json.links[i].target===thisNode) {
           

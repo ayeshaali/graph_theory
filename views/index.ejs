@@ -26,6 +26,7 @@
       $('svg').remove();
       $('#info').html("<h2>Welcome to Trin Analytics!<h2>");      
       $('<script>').attr('src', "script.js").appendTo('body');
+      $('#reset').css('top', $("#info").position().top + $("#info").height()+ 50);
     }
     
     var windowWidth = $(window).width();

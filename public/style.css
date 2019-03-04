@@ -39,7 +39,17 @@ body {
 
 #reset {
   position: absolute;
-  top: 920px;
+  background-color: #b5c6e0; /* Green */
+  border: none;
+  border-radius: 12px;
+  color: black;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
 }
 
 #info {
@@ -56,6 +66,7 @@ body {
   font-family: "Raleway", sans-serif;
   font-size: 25px;
 }
+
 table {
   font-family: "Raleway", sans-serif;
   border-collapse: collapse;

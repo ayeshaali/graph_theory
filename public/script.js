@@ -89,6 +89,8 @@ d3.json("graphFile.json", function(error, json) {
           .style("stroke", function(d){
             return colors[d.cost-1];
           })
+          $('#reset').css('top', $("#info").position().top + $("#info").height()+ 50);
+
         });
 
   node.append("circle")

@@ -18,11 +18,13 @@
     Reset
   </button>
   <div id="info">
+    <h2>Welcome to Trin Analytics!<h2>
   </div>
   <script>
     function reload_js() {
       console.log("remove");
-      $('svg').remove();      
+      $('svg').remove();
+      $('#info').html("<h2>Welcome to Trin Analytics!<h2>");      
       $('<script>').attr('src', "script.js").appendTo('body');
     }
     
@@ -30,6 +32,8 @@
     $('#header').css('width', windowWidth);
     $('#info').css('left', windowWidth*.72);
     $('#info').css('width', windowWidth*.25);
+    $('#reset').css('left', windowWidth*.72);
+    $('#reset').css('top', $("#info").position().top + $("#info").height()+ 50);
   </script>
  </body>
 </html>

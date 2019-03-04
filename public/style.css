@@ -4,6 +4,7 @@
 body {
   font-family: Arial, sans-serif;
   font-size: 10px;
+  background-color: #dddddd;
 }
 
 .node {
@@ -74,4 +75,9 @@ tr:nth-child(even) {
 
 svg text {
   font-family: "Raleway", sans-serif;
+}
+
+a {
+  text-decoration: none;
+  color: black;
 }

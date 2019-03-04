@@ -7,6 +7,7 @@ var svg = d3.select("body").append("svg")
     .style("position", "absolute")
     .style("top", "9em")
     .style("border-style", "solid")
+    .style("background-color", "#FFFFFF");
 
 d3.json("graphFile.json", function(error, json) {
   if (error) throw error;

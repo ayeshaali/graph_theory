@@ -48,15 +48,28 @@ body {
   position: absolute;
   top: 8em;
   text-align: center;
+  padding-bottom: 10px;
 }
 
 #info h2{
   font-family: "Raleway", sans-serif;
   font-size: 25px;
 }
+table {
+  font-family: "Raleway", sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
+}
 
-#info p {
-  font-size: 18px;
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
 }
 
 svg text {

@@ -38,18 +38,22 @@ d3.json("graphFile.json", function(error, json) {
       .on("click", function(d){
         thisNode = d; // where nodeObject is the javascript object for the node, it's probably called "d" in your function.
         $("#info").html("<h2>"+d.label+"</h2>"); 
-        
+        $("#info").append("<table><tr><th>Student</th><th>Number of Classes Shared</th></tr>"); 
+        console.log($("#info"));
         for(var i=0; i<json.links.length; i++) {
           if (json.links[i].source === thisNode && json.links[i].target===thisNode) {
-          
           } else if (json.links[i].source === thisNode) {
             if (json.links[i].cost > 2){
-              $("#info").append("<p>"+json.links[i].target.label+" "+json.links[i].cost+"</p>"); 
+                $("#info table").append("<tr><td>"+json.links[i].target.label+"</td><td>"+json.links[i].cost+"</td></tr>")
             }
           } else if (json.links[i].target===thisNode) {
             if (json.links[i].cost > 2){
-              $("#info").append("<p>"+json.links[i].source.label+" "+json.links[i].cost+"</p>"); 
+              $("#info table").append("<tr><td>"+json.links[i].source.label+"</td><td>"+json.links[i].cost+"</td></tr>")     
+              console.log($("#info"));
             } 
+          }
+          if (i== json.links.length-1) {
+            $("#info").append("</table>"); 
           }
         }
         var connectedNodeIds = json.links

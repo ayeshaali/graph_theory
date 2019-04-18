@@ -5,6 +5,7 @@ var svgFunction = function(json_file) {
   var svg = d3.select("body").append("svg")
       .attr("width", width)
       .attr("height", height)
+      .attr("id", json_file)
       .style("position", "absolute")
       .style("top", "9em")
       .style("border-style", "solid")

@@ -14,7 +14,9 @@
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.js"></script>
   <script src="//d3js.org/d3.v3.min.js"></script>
-  <script id = "scriptJS" src="script.js"></script>
+  <script src="https://d3js.org/d3.v4.js"></script>
+
+  <script id = "scriptJS" src="script2.js"></script>
   <button id="reset" onclick="reload_js()">
     Reset
   </button>
@@ -33,6 +35,11 @@
   <script>
     function reload_js() {
       beginReload()
+      // var IDS = []
+      $('svg').attr('id')
+
+      // $("svg").each(function(){ IDs.push(this.id); });
+      console.log($('svg')[0].id)
       svgFunction("graphFile.json")
     }
     

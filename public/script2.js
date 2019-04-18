@@ -10,7 +10,7 @@ var svg = d3.select("body")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 // Read dummy data
-d3.json("graphFile.json", function( data) {
+d3.json("classesStudentsF.json", function( data) {
 
   // List of node names
   var allNodes = data.nodes.map(function(d){return d.label})
@@ -82,8 +82,8 @@ d3.json("graphFile.json", function( data) {
         .style('opacity', 1)
       // Highlight the connections
       links
-        .style('stroke-opacity', function (link_d) { return link_d.source === d.id | link_d.target === d.id ? 1 : .2;})
-        .style('stroke-width', function (link_d) { return link_d.source === d.id | link_d.target === d.id ? 4 : 1;})
+        .style('stroke-opacity', function (link_d) { return link_d.source === d.id-1 | link_d.target === d.id-1 ? 1 : .2;})
+        .style('stroke-width', function (link_d) { return link_d.source === d.id-1 | link_d.target === d.id-1 ? d.cost*10 : 1;})
       labels
         .style("font-size", function(label_d){ return label_d.label === d.label ? 16 : 2 } )
         .attr("y", function(label_d){ return label_d.label === d.label ? 10 : 0 } )

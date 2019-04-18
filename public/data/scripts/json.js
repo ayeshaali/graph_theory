@@ -55,13 +55,8 @@ var jsonTarget = function() {
       json+='{"source":' +(rowI-1)+',"target":'+(column-1)+',"cost":'+row[column]+'},'
       json+="\n"
     }
-    fs.writeFileSync("somejson.txt", json, "utf8")
   }
-}
-
-
-var jsonFormatting = function() {
-  var data = (fs.readFileSync("somejson.txt", "utf8")).split("\n");
+  var data = json.split("\n");
   var newtxt =""
   for  (var i = 0; i<data.length; i++){
     if (data[i].includes('"cost":0')){
@@ -72,8 +67,38 @@ var jsonFormatting = function() {
   fs.writeFileSync("new_json.txt", newtxt, "utf8")
 }
 
-
-
+var classes = function() {
+  var data = (fs.readFileSync("../data.csv", "utf8")).split("\n");
+  var classObj = {}
+  for (var i=0;i<data.length;i++) {
+    var row = data[i].split(",");
+    for (var j=1; j<row.length;j++) {
+      if (classObj[row[j].trim()]==null) {
+        var arr =[];
+        arr.push(row[0]);
+        classObj[row[j].trim()]=arr
+      } else {
+        classObj[row[j].trim()].push(row[0]);
+      }
+    }
+  }
+  var json='{"nodes":['
+  for(var i = 0; i<Object.keys(classObj).length; i++) {
+    json+='{"label":"'+Object.keys(classObj)[i]+'", "id":"'+i+'"},'
+  }
+  json+='],"links":[';
+  
+  for(var i = 0; i<Object.keys(classObj).length; i++) {
+    var array1=classObj[Object.keys(classObj)[i]]
+    for(var j = i+1; j<Object.keys(classObj).length; j++) {
+      var array2=classObj[Object.keys(classObj)[j]]
+      var array3=array1.filter(value => array2.includes(value))
+      json+='{"source":'+i+',"target":'+j+',"cost":'+array3.length+'},';
+    }
+  }
+  json+="]}"
+  fs.writeFileSync("classes.json", json, "utf8")
+}
 // csvFunction()
 // jsonTarget()
-jsonFormatting()
+classes()

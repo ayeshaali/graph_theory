@@ -9,7 +9,7 @@ var svg = d3.select("body").append("svg")
     .style("border-style", "solid")
     .style("background-color", "#FFFFFF");
 
-d3.json("graphFile.json", function(error, json) {
+d3.json("classes2.json", function(error, json) {
   if (error) throw error;
   var force = d3.layout.force()
     .nodes(json.nodes)

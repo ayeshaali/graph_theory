@@ -68,6 +68,66 @@ var jsonTarget = function() {
 }
 
 var classes = function() {
+  var ordered = classesOrdered();
+  var json='{"nodes":['
+  json+="\n";
+  
+  for(var i = 0; i<Object.keys(ordered).length; i++) {
+    json+='{"label":"'+Object.keys(ordered)[i]+'", "id":"'+(i+1)+'"},'
+    json+="\n";
+  }
+  json+='],"links":[';
+  
+  for(var i = 0; i<Object.keys(ordered).length; i++) {
+    var array1=ordered[Object.keys(ordered)[i]]
+    for(var j = i+1; j<Object.keys(ordered).length; j++) {
+      var array2=ordered[Object.keys(ordered)[j]]
+      var array3=array1.filter(value => array2.includes(value))
+      if (array3.length!=0) {
+        json+='{"source":'+i+',"target":'+j+',"cost":'+array3.length+'},';
+        json+="\n";
+      }
+    }
+  }
+  json+="]}"
+  fs.writeFileSync("classes.json", json, "utf8")
+}
+// csvFunction()
+// // jsonTarget()
+// classes()
+
+var studentC = function() {
+  var ordered = JSON.parse(fs.readFileSync("classesStudents.json", "utf8"));
+  for (var i = 0; i<Object.keys(ordered).length;i++){
+    var arr = ordered[Object.keys(ordered)[i]].sort();
+    ordered[Object.keys(ordered)[i]]=arr
+  }
+  var json='{"nodes":['
+  json+="\n";
+  
+  for(var i = 0; i<Object.keys(ordered).length; i++) {
+    json+='{"label":"'+Object.keys(ordered)[i]+'", "id":"'+(i+1)+'"},'
+    json+="\n";
+  }
+  json+='],"links":[';
+  
+  for(var i = 0; i<Object.keys(ordered).length; i++) {
+    var array1=ordered[Object.keys(ordered)[i]]
+    for(var j = i+1; j<Object.keys(ordered).length; j++) {
+      var array2=ordered[Object.keys(ordered)[j]]
+      var array3=array1.filter(value => array2.includes(value))
+      if (array3.length!=0) {
+        json+='{"source":'+i+',"target":'+j+',"cost":'+array3.length+'},';
+        json+="\n";
+      }
+    }
+  }
+  json+="]}"
+  fs.writeFileSync("classesStudentsF.json", json, "utf8")
+
+}
+
+var classesOrdered = function() {
   var data = (fs.readFileSync("../data.csv", "utf8")).split("\n");
   var classObj = {}
   for (var i=0;i<data.length;i++) {
@@ -82,23 +142,12 @@ var classes = function() {
       }
     }
   }
-  var json='{"nodes":['
-  for(var i = 0; i<Object.keys(classObj).length; i++) {
-    json+='{"label":"'+Object.keys(classObj)[i]+'", "id":"'+i+'"},'
-  }
-  json+='],"links":[';
-  
-  for(var i = 0; i<Object.keys(classObj).length; i++) {
-    var array1=classObj[Object.keys(classObj)[i]]
-    for(var j = i+1; j<Object.keys(classObj).length; j++) {
-      var array2=classObj[Object.keys(classObj)[j]]
-      var array3=array1.filter(value => array2.includes(value))
-      json+='{"source":'+i+',"target":'+j+',"cost":'+array3.length+'},';
-    }
-  }
-  json+="]}"
-  fs.writeFileSync("classes.json", json, "utf8")
+  var ordered ={};
+  Object.keys(classObj).sort().forEach(function(key) {
+    ordered[key] = classObj[key];
+  })
+  delete ordered[""]
+  return ordered;
 }
-// csvFunction()
-// jsonTarget()
-classes()
+
+studentC();

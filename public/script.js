@@ -9,18 +9,19 @@ var svg = d3.select("body").append("svg")
     .style("border-style", "solid")
     .style("background-color", "#FFFFFF");
 
-d3.json("classes2.json", function(error, json) {
+d3.json("classesStudentsF.json", function(error, json) {
   if (error) throw error;
+  
   var force = d3.layout.force()
     .nodes(json.nodes)
     .links(json.links)
     .size([width-20, height])
-    .gravity(0.08)
+    .gravity(.1)
     .linkDistance(function(d) {
-      return (500-d.cost*80)
+      return (600-d.cost*60)
     })
-    .linkStrength(1)
-    .charge(-80)
+    .linkStrength(0.1)
+    .charge(-100)
     .chargeDistance(100)
     .start();
 
@@ -95,14 +96,18 @@ d3.json("classes2.json", function(error, json) {
 
   node.append("circle")
       .attr("r", 6)
-      .attr("fill", "green")
+      .attr("fill", "black")
 
   node.append("text")
         .attr("dx", 12)
         .attr("dy", ".35em")
         .text(function(d) { return d.label })
         .attr("class","label")
-        .style("font-weight", "100")
+        .style("stroke", function(d) {
+          console.log(d.color);
+          return d.color;
+        })
+        .style("font-cost", "100")
         .style("font-size", "13px")
         .style("font-variant", "small-caps");
 

@@ -1,122 +1,163 @@
-var width = $(document).width()*.7,
-    height = 800
+var svgFunction = function(json_file) {
+  var width = $(document).width()*.7,
+      height = 800
 
-var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .style("position", "absolute")
-    .style("top", "9em")
-    .style("border-style", "solid")
-    .style("background-color", "#FFFFFF");
+  var svg = d3.select("body").append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .style("position", "absolute")
+      .style("top", "9em")
+      .style("border-style", "solid")
+      .style("background-color", "#FFFFFF");
 
-d3.json("classesStudentsF.json", function(error, json) {
-  if (error) throw error;
-  
-  var force = d3.layout.force()
-    .nodes(json.nodes)
-    .links(json.links)
-    .size([width-20, height])
-    .gravity(.1)
-    .linkDistance(function(d) {
-      return (600-d.cost*60)
-    })
-    .linkStrength(0.1)
-    .charge(-100)
-    .chargeDistance(100)
-    .start();
+  d3.json(json_file, function(error, json) {
+    if (error) throw error;
+    
+    var force = d3.layout.force()
+      .nodes(json.nodes)
+      .links(json.links)
+      .size([width-20, height])
+      .gravity(.1)
+      .linkDistance(function(d) {
+        return (600-d.cost*60)
+      })
+      .linkStrength(0.1)
+      .charge(-100)
+      .chargeDistance(100)
+      .start();
 
-  var link = svg.selectAll(".link")
-      .data(json.links);
-      
-  link.enter().append("line").attr("class", "link").style("stroke-width", function(d){
-    return d.cost;
-  });
-  
-  var node = svg.selectAll(".node")
-      .data(json.nodes)
-      .enter().append("g")
-      .attr("class", "node")
-      .call(force.drag)
-      .on("click", function(d){
-        thisNode = d; // where nodeObject is the javascript object for the node, it's probably called "d" in your function.
-        $("#info").html("<h2>"+d.label+"</h2>"); 
-        $("#info").append("<table><tr><th>Student</th><th>Number of Classes Shared</th></tr>"); 
-        console.log($("#info"));
-        for(var i=0; i<json.links.length; i++) {
-          if (json.links[i].source === thisNode && json.links[i].target===thisNode) {
-          } else if (json.links[i].source === thisNode) {
-            if (json.links[i].cost > 2){
-                $("#info table").append("<tr><td>"+json.links[i].target.label+"</td><td>"+json.links[i].cost+"</td></tr>")
-            }
-          } else if (json.links[i].target===thisNode) {
-            if (json.links[i].cost > 2){
-              $("#info table").append("<tr><td>"+json.links[i].source.label+"</td><td>"+json.links[i].cost+"</td></tr>")     
-              console.log($("#info"));
-            } 
-          }
-          if (i== json.links.length-1) {
-            $("#info").append("</table>"); 
-          }
-        }
-        var connectedNodeIds = json.links
-        .filter(x => x.source.id == d.id || x.target.id == d.id)
-        .map(x => x.source.id == d.id ? x.target.id : x.source.id);
+    var link = svg.selectAll(".link")
+        .data(json.links);
         
-        d3.selectAll(".node")
-        .selectAll("circle")
-        .attr("fill", function(c) {
-          if (connectedNodeIds.indexOf(c.id) > -1 || c.id == d.id) return "green";
-          else return "red";
-        });
-        
-        var link = d3.selectAll(".link")
-          .data(function(){
-            var newobj = []
-            for(var i=0; i<json.links.length; i++) {
-              if (json.links[i].source === thisNode || json.links[i].target===thisNode) {
-                newobj.push(json.links[i]);
+    link.enter().append("line").attr("class", "link").style("stroke-width", function(d){
+      return d.cost;
+    });
+    
+    var node = svg.selectAll(".node")
+        .data(json.nodes)
+        .enter().append("g")
+        .attr("class", "node")
+        .call(force.drag)
+        .on("click", function(d){
+          thisNode = d; // where nodeObject is the javascript object for the node, it's probably called "d" in your function.
+          $("#info").html("<h2>"+d.label+"</h2>"); 
+          $("#info").append("<table id = 'info-table'><tr><th>Student</th><th>Number of Classes Shared</th></tr>"); 
+          for(var i=0; i<json.links.length; i++) {
+            if (json.links[i].source === thisNode && json.links[i].target===thisNode) {
+            } else if (json.links[i].source === thisNode) {
+              if (json.links[i].cost > 2){
+                  $("#info table").append("<tr><td>"+json.links[i].target.label+"</td><td>"+json.links[i].cost+"</td></tr>")
               }
+            } else if (json.links[i].target===thisNode) {
+              if (json.links[i].cost > 2){
+                $("#info table").append("<tr><td>"+json.links[i].source.label+"</td><td>"+json.links[i].cost+"</td></tr>")     
+              } 
             }
-            return newobj;
-          });
-          link.exit().remove();
+            if (i== json.links.length-1) {
+              $("#info").append("</table>"); 
+            }
+          }
           
-          var colors= ["#3D88EE", "#0656D9", "#032470", "#001A50", "#050934"]
-          d3.selectAll(".link")
-          .attr("class","link")
-          .style("stroke-width", function(d){
-            return d.cost*1.5;
+          
+          sortTable()
+          var connectedNodeIds = json.links
+          .filter(x => x.source.id == d.id || x.target.id == d.id)
+          .map(x => x.source.id == d.id ? x.target.id : x.source.id);
+          
+          d3.selectAll(".node")
+          .selectAll("circle")
+          .attr("fill", function(c) {
+            if (connectedNodeIds.indexOf(c.id) > -1 || c.id == d.id) return "green";
+            else return "red";
+          });
+          
+          var link = d3.selectAll(".link")
+            .data(function(){
+              var newobj = []
+              for(var i=0; i<json.links.length; i++) {
+                if (json.links[i].source === thisNode || json.links[i].target===thisNode) {
+                  newobj.push(json.links[i]);
+                }
+              }
+              return newobj;
+            });
+            link.exit().remove();
+            
+            var colors= ["#3D88EE", "#0656D9", "#032470", "#001A50", "#050934"]
+            d3.selectAll(".link")
+            .attr("class","link")
+            .style("stroke-width", function(d){
+              return d.cost*1.5;
+            })
+            .style("stroke", function(d){
+              return colors[d.cost-1];
+            })
+            $('#reset').css('top', $("#info").position().top + $("#info").height()+ 50);
+
+          });
+
+    node.append("circle")
+        .attr("r", 6)
+        .attr("fill", "black")
+
+    node.append("text")
+          .attr("dx", 12)
+          .attr("dy", ".35em")
+          .text(function(d) { return d.label })
+          .attr("class","label")
+          .style("stroke", function(d) {
+            return d.color;
           })
-          .style("stroke", function(d){
-            return colors[d.cost-1];
-          })
-          $('#reset').css('top', $("#info").position().top + $("#info").height()+ 50);
+          .style("font-cost", "100")
+          .style("font-size", "13px")
+          .style("font-variant", "small-caps");
 
-        });
+    force.on("tick", function() {
+      link.attr("x1", function(d) { return d.source.x; })
+          .attr("y1", function(d) { return d.source.y; })
+          .attr("x2", function(d) { return d.target.x; })
+          .attr("y2", function(d) { return d.target.y; });
 
-  node.append("circle")
-      .attr("r", 6)
-      .attr("fill", "black")
-
-  node.append("text")
-        .attr("dx", 12)
-        .attr("dy", ".35em")
-        .text(function(d) { return d.label })
-        .attr("class","label")
-        .style("stroke", function(d) {
-          console.log(d.color);
-          return d.color;
-        })
-        .style("font-cost", "100")
-        .style("font-size", "13px")
-        .style("font-variant", "small-caps");
-
-  force.on("tick", function() {
-    link.attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
-
-    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+      node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+    });
   });
-});
+}
+
+function sortTable() {
+  console.log("sorting")
+  var table, rows, switching, i, x, y, shouldSwitch;
+  table = document.getElementById("info-table");
+  
+  switching = true;
+  /*Make a loop that will continue until
+  no switching has been done:*/
+  while (switching) {
+    //start by saying: no switching is done:
+    switching = false;
+    rows = table.rows;
+    /*Loop through all table rows (except the
+    first, which contains table headers):*/
+    for (i = 1; i < (rows.length - 1); i++) {
+      //start by saying there should be no switching:
+      shouldSwitch = false;
+      /*Get the two elements you want to compare,
+      one from current row and one from the next:*/
+      x = rows[i].getElementsByTagName("TD")[1];
+      y = rows[i + 1].getElementsByTagName("TD")[1];
+      //check if the two rows should switch place:
+      if (parseInt(x.innerHTML)< parseInt(y.innerHTML)) {
+        //if so, mark as a switch and break the loop:
+        shouldSwitch = true;
+        break;
+      }
+    }
+    if (shouldSwitch) {
+      /*If a switch has been marked, make the switch
+      and mark that a switch has been done:*/
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+    }
+  }
+}
+
+svgFunction("graphFile.json")

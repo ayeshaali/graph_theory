@@ -21,13 +21,25 @@
   <div id="info">
     <h2>Welcome to Trin Analytics!<h2>
   </div>
+    
+<div class="dropdown">
+  <button class="dropbtn">Filter Options</button>
+  <div class="dropdown-content">
+  <a id = "students" href="#" onclick="beginReload();svgFunction('graphFile.json');return false;">Students</a>
+  <a id = "courses" href="#" onclick="beginReload();svgFunction('classesStudentsF.json');return false;">Courses</a>
+  <a id = "classes" href="#" onclick="beginReload();svgFunction('classesComplete.json');return false;">Classes by Section</a>
+  </div>
+</div>
   <script>
     function reload_js() {
-      console.log("remove");
+      beginReload()
+      svgFunction("graphFile.json")
+    }
+    
+    var beginReload = function (){
       $('svg').remove();
       $('#info').html("<h2>Welcome to Trin Analytics!<h2>");      
-      $('<script>').attr('src', "script.js").appendTo('body');
-      $('#reset').css('top', $("#info").position().top + $("#info").height()+ 50);4
+      $('#reset').css('top', $("#info").position().top + $("#info").height()+ 50);
     }
     
     var windowWidth = $(window).width();

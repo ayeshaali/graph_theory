@@ -14,12 +14,18 @@
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.js"></script>
   <script src="//d3js.org/d3.v3.min.js"></script>
-  <script src="https://d3js.org/d3.v4.js"></script>
-
-  <script id = "scriptJS" src="script2.js"></script>
-  <button id="reset" onclick="reload_js()">
-    Reset
-  </button>
+  <% if (mode=="arc") {%>
+    <script src="https://d3js.org/d3.v4.js"></script>
+  <%}%>
+  <script id = "scriptJS" src="<% if (mode=="arc") {%>script2.js<%} else {%>script.js<%}%>"></script>
+  <script>
+    svgFunction("<%=String(user)%>");
+  </script>
+  <% if (mode!="arc") {%>
+    <button id="reset" onclick="reload_js()">
+      Reset
+    </button>
+  <%}%>
   <div id="info">
     <h2>Welcome to Trin Analytics!<h2>
   </div>
@@ -27,23 +33,14 @@
 <div class="dropdown">
   <button class="dropbtn">Filter Options</button>
   <div class="dropdown-content">
-  <a id = "students" href="#" onclick="beginReload();svgFunction('graphFile.json');return false;">Students</a>
-  <a id = "courses" href="#" onclick="beginReload();svgFunction('classesStudentsF.json');return false;">Courses</a>
-  <a id = "classes" href="#" onclick="beginReload();svgFunction('classesComplete.json');return false;">Classes by Section</a>
+  <a id = "students" href="/students">Students</a>
+  <a id = "courses" href="/courses">Courses</a>
+  <a id = "coursesArc" href="/coursesArc">Courses (Arc)</a>
+  <a id = "classes" href="/classes">Classes by Section</a>
   </div>
 </div>
   <script>
-    function reload_js() {
-      beginReload()
-      // var IDS = []
-      $('svg').attr('id')
-
-      // $("svg").each(function(){ IDs.push(this.id); });
-      console.log($('svg')[0].id)
-      svgFunction("graphFile.json")
-    }
-    
-    var beginReload = function (){
+    var reload = function (){
       $('svg').remove();
       $('#info').html("<h2>Welcome to Trin Analytics!<h2>");      
       $('#reset').css('top', $("#info").position().top + $("#info").height()+ 50);

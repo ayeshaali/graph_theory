@@ -16,5 +16,31 @@ app.listen(port, function(){
 
 //first request, renders index
 app.get('/', function(request, response){
-  response.render('index', {page:request.url, title:"Index"});
+  response.status(200);
+  response.setHeader('Content-Type', 'text/html')
+  response.render('index', {user:"graphFile.json", mode:""});
+});
+
+app.get('/students', function(request, response){
+  response.status(200);
+  response.setHeader('Content-Type', 'text/html')
+  response.render('index', {user:"graphFile.json",mode:""});
+});
+
+app.get('/courses', function(request, response){
+  response.status(200);
+  response.setHeader('Content-Type', 'text/html')
+  response.render('index', {user:"courses1.json",mode:""});
+});
+
+app.get('/coursesArc', function(request, response){
+  response.status(200);
+  response.setHeader('Content-Type', 'text/html')
+  response.render('index', {user:"courses1.json", mode:"arc"});
+});
+
+app.get('/classes', function(request, response){
+  response.status(200);
+  response.setHeader('Content-Type', 'text/html')
+  response.render('index', {user:"classes.json",mode:""});
 });

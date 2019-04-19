@@ -20,10 +20,20 @@ var svgFunction = function(json_file) {
       .size([width-20, height])
       .gravity(.1)
       .linkDistance(function(d) {
-        return (600-d.cost*60)
+        if (d.cost < 11) {
+          return (600-d.cost*60)
+        } else {
+          return (700-d.cost*40)
+        }
       })
       .linkStrength(0.1)
-      .charge(-100)
+      .charge(function (d) {
+        if (d.cost < 15) {
+          return -100
+        } else {
+          return -1000
+        }
+      })
       .chargeDistance(100)
       .start();
 
@@ -99,16 +109,19 @@ var svgFunction = function(json_file) {
 
     node.append("circle")
         .attr("r", 6)
-        .attr("fill", "black")
+        .attr("fill", function(d){
+          if(d.color !=null) {
+            return d.color;
+          } else {
+            return "black"
+          }
+        })
 
     node.append("text")
           .attr("dx", 12)
           .attr("dy", ".35em")
           .text(function(d) { return d.label })
           .attr("class","label")
-          .style("stroke", function(d) {
-            return d.color;
-          })
           .style("font-cost", "100")
           .style("font-size", "13px")
           .style("font-variant", "small-caps");
@@ -161,4 +174,4 @@ function sortTable() {
   }
 }
 
-svgFunction("graphFile.json")
+// svgFunction("graphFile.json")

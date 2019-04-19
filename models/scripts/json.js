@@ -147,7 +147,73 @@ var classesOrdered = function() {
     ordered[key] = classObj[key];
   })
   delete ordered[""]
+  console.log(ordered);
   return ordered;
 }
 
-studentC();
+// studentC();
+// classesOrdered()
+
+var fixData = function() {
+    var data = JSON.parse(fs.readFileSync("classesStudentsF.json", "utf8"));
+    console.log(data);
+    var new_obj = {
+      red: [],
+      orange:[],
+      yellow:[],
+      green:[],
+      blue:[],
+      purple:[],
+      pink:[],
+      brown:[]
+    }
+    for (var i = 0; i<Object.keys(data).length;i++){
+      data[Object.keys(data)[i]].class=Object.keys(data)[i]
+       new_obj[data[Object.keys(data)[i]]["color"]].push(data[Object.keys(data)[i]])
+    }
+    console.log(new_obj)
+    new_obj= colorOrganize(new_obj, "orange")
+    new_obj= colorOrganize(new_obj, "yellow")
+    new_obj= colorOrganize(new_obj, "green")
+    new_obj= colorOrganize(new_obj, "blue")
+    new_obj= colorOrganize(new_obj, "purple")
+    new_obj= colorOrganize(new_obj, "pink")
+    new_obj= colorOrganize(new_obj, "brown")
+    // console.log(new_obj)
+    newNew = new_obj.red
+    console.log(newNew)
+    
+    var json='{"nodes":['
+    json+="\n";
+    
+    for(var i = 0; i<newNew.length; i++) {
+      json+='{"label":"'+newNew[i].class+'", "id":"'+(i+1)+'","color":"'+newNew[i].color+'"},'
+      json+="\n";
+    }
+    json+='],"links":[';
+    
+    for(var i = 0; i<newNew.length; i++) {
+      var array1=newNew[i].arr
+      for(var j = i+1; j<newNew.length; j++) {
+        var array2=newNew[j].arr
+        var array3=array1.filter(value => array2.includes(value))
+        if (array3.length!=0) {
+          json+='{"source":'+i+',"target":'+j+',"cost":'+array3.length+'},';
+          json+="\n";
+        }
+      }
+    }
+    json+="]}"
+    fs.writeFileSync("classesStudentsF.json", json, "utf8")
+
+}
+
+var colorOrganize = function (new_obj, color) {
+  for (var i = 0; i<new_obj[color].length;i++){
+     new_obj["red"].push(new_obj[color][i])
+  }
+  delete new_obj[color]
+  return new_obj
+}
+
+fixData()

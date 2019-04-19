@@ -37,6 +37,21 @@ body {
   margin-left: 15px;
 }
 
+.button {
+  position: absolute;
+  background-color: #b5c6e0; /* Green */
+  border: none;
+  border-radius: 12px;
+  color: black;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
 #reset {
   position: absolute;
   background-color: #b5c6e0; /* Green */
@@ -93,6 +108,18 @@ a {
   color: black;
 }
 
+#stats-header {
+  position:absolute; 
+  top:15%; 
+  /* left:2%; */
+  background-color: #ced5e0;
+  width: 98.5%;
+  border-left-style: solid;
+  border-color: #788291;
+}
+#stats-header h2 {
+  padding-left: 1%;
+}
 .dropbtn {
   border-radius: 8px;
   background-color: #7fafc9;

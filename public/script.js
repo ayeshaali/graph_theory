@@ -10,7 +10,12 @@ var svgFunction = function(json_file) {
       .style("top", "9em")
       .style("border-style", "solid")
       .style("background-color", "#FFFFFF");
-
+    
+  var num = 2;  
+  if (json_file=="courses1.json") {
+    num = 10;
+  }
+  
   d3.json(json_file, function(error, json) {
     if (error) throw error;
     
@@ -56,11 +61,11 @@ var svgFunction = function(json_file) {
           for(var i=0; i<json.links.length; i++) {
             if (json.links[i].source === thisNode && json.links[i].target===thisNode) {
             } else if (json.links[i].source === thisNode) {
-              if (json.links[i].cost > 2){
+              if (json.links[i].cost > num){
                   $("#info table").append("<tr><td>"+json.links[i].target.label+"</td><td>"+json.links[i].cost+"</td></tr>")
               }
             } else if (json.links[i].target===thisNode) {
-              if (json.links[i].cost > 2){
+              if (json.links[i].cost > num){
                 $("#info table").append("<tr><td>"+json.links[i].source.label+"</td><td>"+json.links[i].cost+"</td></tr>")     
               } 
             }
@@ -104,7 +109,7 @@ var svgFunction = function(json_file) {
               return colors[d.cost-1];
             })
             $('#reset').css('top', $("#info").position().top + $("#info").height()+ 50);
-
+            $('#stats').css('top', $("#info").position().top + $("#info").height()+ 50);
           });
 
     node.append("circle")

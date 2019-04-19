@@ -44,3 +44,9 @@ app.get('/classes', function(request, response){
   response.setHeader('Content-Type', 'text/html')
   response.render('index', {user:"classes.json",mode:""});
 });
+
+app.get('/stats', function(request, response){
+  response.status(200);
+  response.setHeader('Content-Type', 'text/html')
+  response.render('stats');
+});

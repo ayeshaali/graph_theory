@@ -1,44 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Networks</title>
+  <title>Trinity Analytics- Network Graphs</title>
   <script src="//d3js.org/d3.v3.min.js"></script>
   <script src="https://d3js.org/d3.v4.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.js"></script>
   <link rel="stylesheet" href="style.css">
- </head>
+</head>
 
 <body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.js"></script>
+  <script src="//d3js.org/d3.v3.min.js"></script>
+  <% if (mode=="arc") {%><script src="https://d3js.org/d3.v4.js"></script><%}%>
+  <script id = "scriptJS" src="<% if (mode=="arc") {%>script2.js<%} else {%>script.js<%}%>"></script>
+  
   <div id="header">
     <h1><a href="/">Trin Analytics</a></h1>
   </div>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.js"></script>
-  <script src="//d3js.org/d3.v3.min.js"></script>
-  <% if (mode=="arc") {%>
-    <script src="https://d3js.org/d3.v4.js"></script>
-  <%}%>
-  <script id = "scriptJS" src="<% if (mode=="arc") {%>script2.js<%} else {%>script.js<%}%>"></script>
-  <script>
-    svgFunction("<%=String(user)%>");
-  </script>
-  <% if (mode!="arc") {%>
-    <button id="reset" onclick="reload_js()">
-      Reset
-    </button>
-  <%}%>
-  <div id="info">
-    <h2>Welcome to Trin Analytics!<h2>
-  </div>
+  
+  <script>svgFunction("<%=String(user)%>");</script>
+  
+  <% if (mode!="arc") {%><button id="reset" class="button" onclick="reload_js()">Reset</button><%}%>
+  <a id="stats" class="button" href="/stats">Stats</a>  
+  
+  <div id="info"><h2>Welcome to Trin Analytics!<h2></div>
     
-<div class="dropdown">
-  <button class="dropbtn">Filter Options</button>
-  <div class="dropdown-content">
-  <a id = "students" href="/students">Students</a>
-  <a id = "courses" href="/courses">Courses</a>
-  <a id = "coursesArc" href="/coursesArc">Courses (Arc)</a>
-  <a id = "classes" href="/classes">Classes by Section</a>
+  <div class="dropdown">
+    <button class="dropbtn">Filter Options</button>
+    <div class="dropdown-content">
+      <a id = "students" href="/students">Students</a>
+      <a id = "courses" href="/courses">Courses</a>
+      <a id = "coursesArc" href="/coursesArc">Courses (Arc)</a>
+      <a id = "classes" href="/classes">Classes by Section</a>
+    </div>
   </div>
-</div>
+  
   <script>
     var reload = function (){
       $('svg').remove();
@@ -52,6 +48,9 @@
     $('#info').css('width', windowWidth*.25);
     $('#reset').css('left', windowWidth*.72);
     $('#reset').css('top', $("#info").position().top + $("#info").height()+ 50);
+    
+    $('#stats').css('left', windowWidth*.77);
+    $('#stats').css('top', $("#info").position().top + $("#info").height()+ 50);
   </script>
- </body>
+</body>
 </html>

@@ -46,7 +46,11 @@ var svgFunction = function(json_file) {
         .data(json.links);
         
     link.enter().append("line").attr("class", "link").style("stroke-width", function(d){
-      return d.cost;
+      if (json_file=="courses1.json") {
+        return d.cost/2;
+      } else {
+        return d.cost;
+      }
     });
     
     var node = svg.selectAll(".node")
@@ -91,7 +95,7 @@ var svgFunction = function(json_file) {
             .data(function(){
               var newobj = []
               for(var i=0; i<json.links.length; i++) {
-                if (json.links[i].source === thisNode || json.links[i].target===thisNode) {
+                if (json.links[i].source.id === thisNode.id|| json.links[i].target.id===thisNode.id) {
                   newobj.push(json.links[i]);
                 }
               }

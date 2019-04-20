@@ -1,6 +1,6 @@
 var fs = require('fs');
 var getNames = function(){
-  var data = (fs.readFileSync("data.csv", "utf8")).split("\n");
+  var data = (fs.readFileSync("../data.csv", "utf8")).split("\n");
   var names = [];
   for (var i = 0; i<data.length; i++){
     var row = data[i].split(",");
@@ -10,7 +10,7 @@ var getNames = function(){
 }
 
 var csvFunction = function() {
-  var data = (fs.readFileSync("data.csv", "utf8")).split("\n");
+  var data = (fs.readFileSync("../data.csv", "utf8")).split("\n");
   json=" ,"
   json+=getNames().toString()
   json+="\n"
@@ -49,6 +49,17 @@ var csvFunction = function() {
 var jsonTarget = function() {
   var data = (fs.readFileSync("new_data.csv", "utf8")).split("\n");
   var json= "";
+  
+  var json='{"nodes":['
+  json+="\n";
+  
+  var names= data[0].split(",");
+  for(var i = 1; i<names.length; i++) {
+    json+='{"label":"'+names[i]+'", "id":'+(i)+'},'
+    json+="\n";
+  }
+  json+='],"links":[';
+  
   for (var rowI=1; rowI<data.length; rowI++){
     var row = data[rowI].split(",");
     for (var column=rowI+1; column<row.length; column++){
@@ -64,7 +75,7 @@ var jsonTarget = function() {
       newtxt+=data[i]+"\n"
     }
   }
-  fs.writeFileSync("new_json.txt", newtxt, "utf8")
+  fs.writeFileSync("new_json.json", newtxt, "utf8")
 }
 
 var classes = function() {
@@ -93,7 +104,7 @@ var classes = function() {
   fs.writeFileSync("classes.json", json, "utf8")
 }
 // csvFunction()
-// // jsonTarget()
+// jsonTarget()
 // classes()
 
 var studentC = function() {
@@ -216,4 +227,41 @@ var colorOrganize = function (new_obj, color) {
   return new_obj
 }
 
-fixData()
+var pythonDic = function() {
+  var data = (fs.readFileSync("../data.csv", "utf8")).split("\n");
+  json="{\n"
+  
+  for (var i = 0; i <data.length; i++){
+    var row = data[i].split(",");
+    json+='"'+row[0]+'": ['
+    for (var j=0; j<data.length; j++){
+      var check=true;
+      if (j!=i){
+        var check_row = data[j].split(",");
+        
+        for (var index1 = 1; index1<row.length; index1++){
+          for (var index2 = 1; index2<check_row.length; index2++){
+            if (check==true){
+            if ((row[index1]).trim() == (check_row[index2]).trim()){
+              if (check_row[index2] == null||check_row[index2]==""|| check_row[index2]==" "){
+                console.log("empty")
+              } else {
+                console.log("."+index1+": "+check_row[index2]+".")
+                json+='"'+check_row[0]+'",';
+                check=false;
+                break;
+              }
+            }
+          }
+        }
+      }
+      }
+    }
+    json+="],\n"
+  }
+  json+="}"
+  fs.writeFileSync("graph_data.txt", json, "utf8")
+  
+}
+
+pythonDic()

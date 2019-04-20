@@ -120,6 +120,10 @@ a {
 #stats-header h2 {
   padding-left: 1%;
 }
+#data {
+  position: absolute;
+  top: 25%;
+}
 .dropbtn {
   border-radius: 8px;
   background-color: #7fafc9;

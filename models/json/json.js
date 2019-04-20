@@ -1,4 +1,5 @@
 var fs = require('fs');
+//array of names
 var getNames = function(){
   var data = (fs.readFileSync("../data.csv", "utf8")).split("\n");
   var names = [];
@@ -9,6 +10,7 @@ var getNames = function(){
   return names
 }
 
+//data.csv --> new_data.csv (csv with number of links between each person)
 var csvFunction = function() {
   var data = (fs.readFileSync("../data.csv", "utf8")).split("\n");
   json=" ,"
@@ -46,6 +48,7 @@ var csvFunction = function() {
   fs.writeFileSync("new_data.csv", json, "utf8")
 }
 
+//new_data.csv --> new_json.json (graphFile.json)
 var jsonTarget = function() {
   var data = (fs.readFileSync("new_data.csv", "utf8")).split("\n");
   var json= "";
@@ -78,6 +81,32 @@ var jsonTarget = function() {
   fs.writeFileSync("new_json.json", newtxt, "utf8")
 }
 
+//data.csv --> key: class; value: array of students
+var classesOrdered = function() {
+  var data = (fs.readFileSync("../data.csv", "utf8")).split("\n");
+  var classObj = {}
+  for (var i=0;i<data.length;i++) {
+    var row = data[i].split(",");
+    for (var j=1; j<row.length;j++) {
+      if (classObj[row[j].trim()]==null) {
+        var arr =[];
+        arr.push(row[0]);
+        classObj[row[j].trim()]=arr
+      } else {
+        classObj[row[j].trim()].push(row[0]);
+      }
+    }
+  }
+  var ordered ={};
+  Object.keys(classObj).sort().forEach(function(key) {
+    ordered[key] = classObj[key];
+  })
+  delete ordered[""]
+  console.log(ordered);
+  return ordered;
+}
+
+//makes classes.json (links by section)
 var classes = function() {
   var ordered = classesOrdered();
   var json='{"nodes":['
@@ -101,12 +130,10 @@ var classes = function() {
     }
   }
   json+="]}"
-  fs.writeFileSync("classes.json", json, "utf8")
+  fs.writeFileSync("classes2.json", json, "utf8")
 }
-// csvFunction()
-// jsonTarget()
-// classes()
 
+//classesStudents.json (key: full courses, value:array of students)--> json with links, no color, alphabetical
 var studentC = function() {
   var ordered = JSON.parse(fs.readFileSync("classesStudents.json", "utf8"));
   for (var i = 0; i<Object.keys(ordered).length;i++){
@@ -135,36 +162,9 @@ var studentC = function() {
   }
   json+="]}"
   fs.writeFileSync("classesStudentsF.json", json, "utf8")
-
 }
 
-var classesOrdered = function() {
-  var data = (fs.readFileSync("../data.csv", "utf8")).split("\n");
-  var classObj = {}
-  for (var i=0;i<data.length;i++) {
-    var row = data[i].split(",");
-    for (var j=1; j<row.length;j++) {
-      if (classObj[row[j].trim()]==null) {
-        var arr =[];
-        arr.push(row[0]);
-        classObj[row[j].trim()]=arr
-      } else {
-        classObj[row[j].trim()].push(row[0]);
-      }
-    }
-  }
-  var ordered ={};
-  Object.keys(classObj).sort().forEach(function(key) {
-    ordered[key] = classObj[key];
-  })
-  delete ordered[""]
-  console.log(ordered);
-  return ordered;
-}
-
-// studentC();
-// classesOrdered()
-
+//takes a file that no longer exists and organizes by color--> courses1.json
 var fixData = function() {
     var data = JSON.parse(fs.readFileSync("classesStudentsF.json", "utf8"));
     console.log(data);
@@ -215,10 +215,11 @@ var fixData = function() {
       }
     }
     json+="]}"
-    fs.writeFileSync("classesStudentsF.json", json, "utf8")
+    fs.writeFileSync("courses.json", json, "utf8")
 
 }
 
+//organize by Color
 var colorOrganize = function (new_obj, color) {
   for (var i = 0; i<new_obj[color].length;i++){
      new_obj["red"].push(new_obj[color][i])
@@ -227,6 +228,7 @@ var colorOrganize = function (new_obj, color) {
   return new_obj
 }
 
+//make python dictionary
 var pythonDic = function() {
   var data = (fs.readFileSync("../data.csv", "utf8")).split("\n");
   json="{\n"
@@ -263,5 +265,3 @@ var pythonDic = function() {
   fs.writeFileSync("graph_data.txt", json, "utf8")
   
 }
-
-pythonDic()

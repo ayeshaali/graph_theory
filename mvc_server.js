@@ -9,7 +9,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 // app.use(favicon(__dirname + '/public/images/logo.png'));
 
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 5000;
 app.listen(port, function(){
   console.log('Server started at '+ new Date()+', on port ' + port+'!');
 });
@@ -45,6 +45,8 @@ app.get('/classes', function(request, response){
   response.render('index', {user:"classes.json",mode:""});
 });
 
+app.get('/stats', callName);
+
 app.get('/stats', function(request, response){
   response.status(200);
   response.setHeader('Content-Type', 'text/html')
@@ -52,29 +54,18 @@ app.get('/stats', function(request, response){
 });
 
 
-
-function callName(req, res) { 
-      
-    // Use child_process.spawn method from  
-    // child_process module and assign it 
-    // to variable spawn 
-    var spawn = require("child_process").spawn; 
-      
-    // Parameters passed in spawn - 
-    // 1. type_of_script 
-    // 2. list containing Path of the script 
-    //    and arguments for the script  
-      
-    // E.g : http://localhost:3000/name?firstname=Mike&lastname=Will 
-    // so, first name = Mike and last name = Will 
-    var process = spawn('python',["./hello.py", 
-                            req.query.firstname, 
-                            req.query.lastname] ); 
-  
-    // Takes stdout data from script which executed 
-    // with arguments and send this data to res object 
+function callName(req, res, callback) {
+    var child_process = require("child_process"); 
+    var spawn = child_process.spawn;
+    var process = spawn('python',["models/python/graphdata.py"]); 
+    var dataString = ""
+    res.status(200);
+    res.setHeader('Content-Type', 'text/html')
     process.stdout.on('data', function(data) { 
-        res.send(data.toString()); 
-    } ) 
+        dataString = data.toString('utf8')
+        console.log(dataString)
+        var new_data = dataString.split("yeet")
+        res.render('stats', {data:new_data});
+    })
 } 
   

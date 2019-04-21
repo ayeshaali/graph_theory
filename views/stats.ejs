@@ -27,9 +27,21 @@
 </div>
 
 <div id="data">
-  <% for (var i = 0; i<data.length;i ++) {%>
-    <p><%=data[i]%></p>
-  <%}%>
+  <table class="cinereousTable">
+      <tr>
+        <th class="top_row">Categories</th>
+        <th class="top_row">Graph of Students</th>
+        <th class="top_row">Graph of Courses</th>
+      </tr>
+      <%for(var i=0; i < data["column1"].length; i++){%>
+        <tr>
+        <td> <%=data["column1"][i]%></td>
+        <td> <%=data["column2"][i]%></td>
+        <td> <%=data["column3"][i]%></td>
+        </tr>
+      <%}%>
+  </table>
+
   
   <form action="/search" method="get">
       Search for a senior to check out their vertex degree:<input type="text" id="enter_name_input" name="name"><br>

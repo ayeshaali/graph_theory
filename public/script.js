@@ -11,12 +11,16 @@ var svgFunction = function(json_file) {
       .style("border-style", "solid")
       .style("background-color", "#FFFFFF");
     
-  var num = 2;  
+  var num = 2;
+  var colorL=4;  
   if (json_file=="courses1.json") {
     num = 10;
+    colorL=52
+  } else if (json_file=="classes.json") {
+    colorL=9;
   }
   
-  d3.json(json_file, function(error, json) {
+d3.json(json_file, function(error, json) {
     if (error) throw error;
     
     var force = d3.layout.force()
@@ -87,9 +91,22 @@ var svgFunction = function(json_file) {
           d3.selectAll(".node")
           .selectAll("circle")
           .attr("fill", function(c) {
-            if (connectedNodeIds.indexOf(c.id) > -1 || c.id == d.id) return "green";
-            else return "red";
-          });
+            if (json_file!="courses1.json") {
+              if (connectedNodeIds.indexOf(c.id) > -1 || c.id == d.id) return "green";
+              else return "red";
+            } else {
+              return c.color
+            }
+          })
+          .style("opacity", function(c){
+            if (json_file=="courses1.json") {
+              if (connectedNodeIds.indexOf(c.id) > -1 || c.id == d.id) {
+                return "1" 
+              } else {
+                return "0.1"
+              }
+            }
+          })
           
           svg.selectAll(".link").remove();
           link = svg.selectAll(".link").data(json.links.filter(x => x.source.id == d.id || x.target.id == d.id));
@@ -102,17 +119,24 @@ var svgFunction = function(json_file) {
             }
           });
           
-            var colors= ["#3D88EE", "#0656D9", "#032470", "#001A50", "#050934"]
-            
+          var color = d3.scale.linear().domain([1,colorL])
+                        .interpolate(d3.interpolateHcl)
+                        .range([d3.rgb("#33cccc"), d3.rgb('#003366')]);
+
             d3.selectAll(".link")
             .style("stroke-width", function(d){
-              return d.cost*1.5;
+              if (json_file=="courses1.json") {
+                return d.cost/2;
+              } else {
+                return d.cost*1.5;
+              }
             })
             .style("stroke", function(d){
-              return colors[d.cost-1];
+              return color(d.cost-1);
             })
-            $('#reset').css('top', $("#info").position().top + $("#info").height()+ 50);
-            $('#stats').css('top', $("#info").position().top + $("#info").height()+ 50);
+            $('.button').css('top', $("#info").position().top + $("#info").height()+ 50);
+            $('.button').css('top', $("#info").position().top + $("#info").height()+ 50);
+            $('.button').css('top', $("#info").position().top + $("#info").height()+ 50);
           });
 
     node.append("circle")
@@ -181,5 +205,3 @@ function sortTable() {
     }
   }
 }
-
-// svgFunction("graphFile.json")

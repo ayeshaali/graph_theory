@@ -5,12 +5,14 @@
   <script src="//d3js.org/d3.v3.min.js"></script>
   <script src="https://d3js.org/d3.v4.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.js"></script>
+  <script src="saveSvgAsPng.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.js"></script>
   <script src="//d3js.org/d3.v3.min.js"></script>
+  <script src="saveSvgAsPng.js"></script>
   <% if (mode=="arc") {%><script src="https://d3js.org/d3.v4.js"></script><%}%>
   <script id = "scriptJS" src="<% if (mode=="arc") {%>script2.js<%} else {%>script.js<%}%>"></script>
   
@@ -20,9 +22,10 @@
   
   <script>svgFunction("<%=String(user)%>");</script>
   
-  <% if (mode!="arc") {%><button id="reset" class="button" onclick="reload_js()">Reset</button><%}%>
+  <button id="reset" class="button" onclick="reload()">Reset</button>
   <a id="stats" class="button" href="/stats">Stats</a>  
-  
+  <button class="button" id='saveButton' onclick="saveSvgAsPng(document.getElementById('<%=String(user)%>'), 'diagram.png')">Export visualization to PNG</button>
+
   <div id="info"><h2>Welcome to Trin Analytics!<h2></div>
     
   <div class="dropdown">
@@ -39,7 +42,8 @@
     var reload = function (){
       $('svg').remove();
       $('#info').html("<h2>Welcome to Trin Analytics!<h2>");      
-      $('#reset').css('top', $("#info").position().top + $("#info").height()+ 50);
+      $('.button').css('top', $("#info").position().top + $("#info").height()+ 30);
+      svgFunction("<%=String(user)%>");
     }
     
     var windowWidth = $(window).width();
@@ -47,10 +51,9 @@
     $('#info').css('left', windowWidth*.72);
     $('#info').css('width', windowWidth*.25);
     $('#reset').css('left', windowWidth*.72);
-    $('#reset').css('top', $("#info").position().top + $("#info").height()+ 50);
-    
     $('#stats').css('left', windowWidth*.77);
-    $('#stats').css('top', $("#info").position().top + $("#info").height()+ 50);
+    $('#saveButton').css('left', windowWidth*.817);
+    $('.button').css('top', $("#info").position().top + $("#info").height()+ 30);
   </script>
 </body>
 </html>

@@ -5,6 +5,7 @@ var svgFunction = function(json_file) {
   // append the svg object to the body of the page
   var svg = d3.select("body")
     .append("svg")
+    .attr("id", json_file)
     .attr("width", width)
     .attr("height", height + 200)
     .append("g")
@@ -78,7 +79,7 @@ var svgFunction = function(json_file) {
 
     // Add the highlighting functionnality
     nodes
-      .on('mouseover', function (d) {
+      .on('click', function (d) {
         // Highlight the nodes: every node is green except of him
         nodes
           .style('opacity', .2)
@@ -104,24 +105,12 @@ var svgFunction = function(json_file) {
         labels
           .style("font-size", function(label_d){ return label_d.label === d.label ? 16 : 12 } )
           .style("font-weight", function(label_d){ return label_d.label === d.label ? "bold" : "normal" } )
+      });
 
-          // .attr("y", function(label_d){ return label_d.label === d.label ? 10 : 0 } )
-
-      })
-      .on('mouseout', function (d) {
-        nodes.style('opacity', 1)
-        links
-          .style('stroke', 'grey')
-          .style('stroke-opacity', .8)
-          .style('stroke-width', function(d){
-            return (d.cost).map(0,50,0,25)
-          })
-        labels
-          .style("font-size", 12)
-      })
   })
 }
 
 Number.prototype.map = function (in_min, in_max, out_min, out_max) {
   return (this - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
+

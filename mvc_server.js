@@ -59,23 +59,21 @@ app.get('/stats', function (req, res){
 
 app.get('/search', function (request, response) {
   var spawn = child_process.spawn;
-  var process = spawn('python',["models/python/graphdata.py"]);
-
+  var process = spawn('python',["models/python/graphdata.py", '"'+request.query.name+'"']);
   response.status(200);
   response.setHeader('Content-Type', 'text/html')
   process.stdout.on('data', function(data) { 
-      var dataString = data.toString('utf8').split("yeet")
-      console.log('"'+request.query.name+'"')
+      var dataString1 = data.toString('utf8').split("Column2")
+      var dataString2 = dataString1[1].split("Column3")
+      var column1 = dataString1[0].split("yeet")
+      var column2 = dataString2[0].split("yeet")
+      var column3 = dataString2[1].split("yeet")
+      var obj = {
+        "column1":column1,
+        "column2":column2,
+        "column3":column3
+      }
+      response.render('stats', {data:obj, search:""});
   })
-  process.on('close', function(exit_code) {
-    console.log('Closed before stop: Closing code: ', exit_code);
-    var py = spawn('python',["models/python/search.py", '"'+request.query.name+'"']);
-    py.stdout.on('data', function(help) { 
-      var dataString2 = help.toString('utf8').split("yeet")
-      console.log(request.query.name)
-      response.render('stats', {data:dataString, search:dataString2});
-    })
-  });
-
 });
   

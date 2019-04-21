@@ -228,7 +228,7 @@ var colorOrganize = function (new_obj, color) {
   return new_obj
 }
 
-//make python dictionary
+//make python dictionary (students)
 var pythonDic = function() {
   var data = (fs.readFileSync("../data.csv", "utf8")).split("\n");
   json="{\n"
@@ -266,6 +266,7 @@ var pythonDic = function() {
   
 }
 
+//make python dictionary (courses)
 var pythonCourses = function() {
   var ordered = JSON.parse(fs.readFileSync("classesStudents.json", "utf8"));
   for (var i = 0; i<Object.keys(ordered).length;i++){
@@ -291,5 +292,3 @@ var pythonCourses = function() {
   json+="}"
   fs.writeFileSync("graphCourses.txt", json, "utf8")
 }
-
-pythonCourses()

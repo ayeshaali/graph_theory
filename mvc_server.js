@@ -52,8 +52,17 @@ app.get('/stats', function (req, res){
   res.status(200);
   res.setHeader('Content-Type', 'text/html')
   process.stdout.on('data', function(data) { 
-      var dataString = data.toString('utf8').split("yeet")
-      res.render('stats', {data:dataString, search:""});
+    var dataString1 = data.toString('utf8').split("Column2")
+    var dataString2 = dataString1[1].split("Column3")
+    var column1 = dataString1[0].split("yeet")
+    var column2 = dataString2[0].split("yeet")
+    var column3 = dataString2[1].split("yeet")
+    var obj = {
+      "column1":column1,
+      "column2":column2,
+      "column3":column3
+    }
+    res.render('stats', {data:obj, search:""});
   })
 });
 
@@ -62,18 +71,9 @@ app.get('/search', function (request, response) {
   var process = spawn('python',["models/python/graphdata.py", '"'+request.query.name+'"']);
   response.status(200);
   response.setHeader('Content-Type', 'text/html')
-  process.stdout.on('data', function(data) { 
-      var dataString1 = data.toString('utf8').split("Column2")
-      var dataString2 = dataString1[1].split("Column3")
-      var column1 = dataString1[0].split("yeet")
-      var column2 = dataString2[0].split("yeet")
-      var column3 = dataString2[1].split("yeet")
-      var obj = {
-        "column1":column1,
-        "column2":column2,
-        "column3":column3
-      }
-      response.render('stats', {data:obj, search:""});
+  process.stdout.on('data', function(data) {
+      var dataString1 = data.toString('utf8').split("yeet") 
+      response.render('stats', {data:dataString1, search:""});
   })
 });
   

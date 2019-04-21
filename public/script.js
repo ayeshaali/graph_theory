@@ -91,21 +91,20 @@ var svgFunction = function(json_file) {
             else return "red";
           });
           
-          var link = d3.selectAll(".link")
-            .data(function(){
-              var newobj = []
-              for(var i=0; i<json.links.length; i++) {
-                if (json.links[i].source.id === thisNode.id|| json.links[i].target.id===thisNode.id) {
-                  newobj.push(json.links[i]);
-                }
-              }
-              return newobj;
-            });
-            link.exit().remove();
-            
+          svg.selectAll(".link").remove();
+          link = svg.selectAll(".link").data(json.links.filter(x => x.source.id == d.id || x.target.id == d.id));
+              
+          link.enter().append("line").attr("class", "link").style("stroke-width", function(d){
+            if (json_file=="courses1.json") {
+              return d.cost/2;
+            } else {
+              return d.cost;
+            }
+          });
+          
             var colors= ["#3D88EE", "#0656D9", "#032470", "#001A50", "#050934"]
+            
             d3.selectAll(".link")
-            .attr("class","link")
             .style("stroke-width", function(d){
               return d.cost*1.5;
             })

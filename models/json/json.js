@@ -265,3 +265,31 @@ var pythonDic = function() {
   fs.writeFileSync("graph_data.txt", json, "utf8")
   
 }
+
+var pythonCourses = function() {
+  var ordered = JSON.parse(fs.readFileSync("classesStudents.json", "utf8"));
+  for (var i = 0; i<Object.keys(ordered).length;i++){
+    var arr = ordered[Object.keys(ordered)[i]].sort();
+    ordered[Object.keys(ordered)[i]]=arr
+  }
+  json="{\n"
+  
+  for(var i = 0; i<Object.keys(ordered).length; i++) {
+    var array1=ordered[Object.keys(ordered)[i]]
+    json+='"'+Object.keys(ordered)[i]+'": ['
+    for(var j =0; j<Object.keys(ordered).length; j++) {
+      if (j!=i){
+        var array2=ordered[Object.keys(ordered)[j]]
+        var array3=array1.filter(value => array2.includes(value))
+        if (array3.length!=0) {
+            json+='"'+Object.keys(ordered)[j]+'",';
+        }
+      }
+    }
+    json+="],\n"
+  }
+  json+="}"
+  fs.writeFileSync("graphCourses.txt", json, "utf8")
+}
+
+pythonCourses()

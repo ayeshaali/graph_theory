@@ -2,6 +2,7 @@
 var express = require('express');
 var fs = require('fs');
 var favicon = require('serve-favicon');
+var child_process = require("child_process")
 
 var app = express();
 app.use(express.static('public'));
@@ -45,27 +46,36 @@ app.get('/classes', function(request, response){
   response.render('index', {user:"classes.json",mode:""});
 });
 
-app.get('/stats', callName);
-
-app.get('/stats', function(request, response){
-  response.status(200);
-  response.setHeader('Content-Type', 'text/html')
-  response.render('stats');
+app.get('/stats', function (req, res){
+  var spawn = child_process.spawn;
+  var process = spawn('python',["models/python/graphdata.py"]);
+  res.status(200);
+  res.setHeader('Content-Type', 'text/html')
+  process.stdout.on('data', function(data) { 
+      var dataString = data.toString('utf8').split("yeet")
+      res.render('stats', {data:dataString, search:""});
+  })
 });
 
+app.get('/search', function (request, response) {
+  var spawn = child_process.spawn;
+  var process = spawn('python',["models/python/graphdata.py"]);
 
-function callName(req, res, callback) {
-    var child_process = require("child_process"); 
-    var spawn = child_process.spawn;
-    var process = spawn('python',["models/python/graphdata.py"]); 
-    var dataString = ""
-    res.status(200);
-    res.setHeader('Content-Type', 'text/html')
-    process.stdout.on('data', function(data) { 
-        dataString = data.toString('utf8')
-        console.log(dataString)
-        var new_data = dataString.split("yeet")
-        res.render('stats', {data:new_data});
+  response.status(200);
+  response.setHeader('Content-Type', 'text/html')
+  process.stdout.on('data', function(data) { 
+      var dataString = data.toString('utf8').split("yeet")
+      console.log('"'+request.query.name+'"')
+  })
+  process.on('close', function(exit_code) {
+    console.log('Closed before stop: Closing code: ', exit_code);
+    var py = spawn('python',["models/python/search.py", '"'+request.query.name+'"']);
+    py.stdout.on('data', function(help) { 
+      var dataString2 = help.toString('utf8').split("yeet")
+      console.log(request.query.name)
+      response.render('stats', {data:dataString, search:dataString2});
     })
-} 
+  });
+
+});
   

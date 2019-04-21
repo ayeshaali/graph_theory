@@ -123,6 +123,9 @@ a {
 #data {
   position: absolute;
   top: 25%;
+  font-family: "Raleway", sans-serif;
+  padding-left: 20px;
+  font-size: 12px;
 }
 .dropbtn {
   border-radius: 8px;

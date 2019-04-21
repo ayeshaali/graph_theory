@@ -19,7 +19,7 @@ var svgFunction = function(json_file) {
     // A linear scale to position the nodes on the X axis
     var x = d3.scalePoint()
       .domain(allNodes)
-      .range([90, width-100])
+      .range([5, width-100])
 
     var idToNode = {};
     data.nodes.forEach(function (n) {
@@ -73,7 +73,7 @@ var svgFunction = function(json_file) {
         .attr("y", 0)
         .text(function(d){ return(d.label)} )
         .style("text-anchor", "end")
-        .attr("transform", function(d){ return( "translate(" + (x(d.label)) + "," + (height-15) + ")rotate(-45)")})
+        .attr("transform", function(d){ return( "translate(" + (x(d.label)) + "," + (height-15) + ")rotate(-50)")})
         .style("font-size", 12)
 
     // Add the highlighting functionnality

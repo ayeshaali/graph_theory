@@ -7,7 +7,6 @@ dict2 = eval(open("models/python/graphCourses.txt").read())
 graph = Graph(dict)
 graph2 = Graph(dict2)
 
-print("Categories")
 print("Number of Vertices")
 print("yeet")
 print("Number of Edges (Connections)")

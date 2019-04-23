@@ -30,9 +30,9 @@ d3.json(json_file, function(error, json) {
       .gravity(.1)
       .linkDistance(function(d) {
         if (d.cost < 11) {
-          return (600-d.cost*60)
+          return (500-d.cost*50)
         } else {
-          return (700-d.cost*40)
+          return (950-d.cost*40)
         }
       })
       .linkStrength(0.1)
@@ -156,7 +156,8 @@ d3.json(json_file, function(error, json) {
           .attr("class","label")
           .style("font-cost", "100")
           .style("font-size", "13px")
-          .style("font-variant", "small-caps");
+          .style("font-variant", "small-caps")
+          .style("z-index", "10000");
 
     force.on("tick", function() {
       link.attr("x1", function(d) { return d.source.x; })

@@ -47,24 +47,18 @@ app.get('/classes', function(request, response){
 });
 
 app.get('/stats', function (req, res){
-  var spawn = child_process.spawn;
-  var process = spawn('python',["models/python/graphdata.py"]);
   res.status(200);
   res.setHeader('Content-Type', 'text/html')
-  process.stdout.on('data', function(data) { 
-    var dataString1 = data.toString('utf8').split("Column2")
-    var dataString2 = dataString1[1].split("Column3")
-    var column1 = dataString1[0].split("yeet")
-    var column2 = dataString2[0].split("yeet")
-    var column3 = dataString2[1].split("yeet")
-    var obj = {
-      "column1":column1,
-      "column2":column2,
-      "column3":column3
-    }
+  var categories = ["Number of Vertices", "Number of Edges (Connections)", "Minimum Vertex Degree: ", "Maximum Vertex Degree: ", "Density of Graph: ", "Is The Graph Connected?: ", "Average Vertex Degree: "]
+  var graph1 = ["106", "2522", "26", "65", "0.4531895777178796", "True", "47"]
+  var graph2 = ["61", "539", "4", "60", "0.29453551912568304", "True", "17"]
+  var obj = {
+    "column1":categories,
+    "column2":graph1,
+    "column3":graph2
+  }
     res.render('stats', {data:obj, search:""});
-  })
-});
+  });
 
 app.get('/search', function (request, response) {
   var spawn = child_process.spawn;

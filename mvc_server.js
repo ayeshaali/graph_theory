@@ -62,12 +62,20 @@ app.get('/stats', function (req, res){
 
 app.get('/search', function (request, response) {
   var spawn = child_process.spawn;
-  var process = spawn('python',["models/python/graphdata.py", '"'+request.query.name+'"']);
+  var process = spawn('python',["models/python/graphdata.py", request.query.name]);
+  var categories = ["Number of Vertices", "Number of Edges (Connections)", "Minimum Vertex Degree: ", "Maximum Vertex Degree: ", "Density of Graph: ", "Is The Graph Connected?: ", "Average Vertex Degree: "]
+  var graph1 = ["106", "2522", "26", "65", "0.4531895777178796", "True", "47"]
+  var graph2 = ["61", "539", "4", "60", "0.29453551912568304", "True", "17"]
+  var obj = {
+    "column1":categories,
+    "column2":graph1,
+    "column3":graph2
+  }
   response.status(200);
   response.setHeader('Content-Type', 'text/html')
   process.stdout.on('data', function(data) {
-      var dataString1 = data.toString('utf8').split("yeet") 
-      response.render('stats', {data:dataString1, search:""});
+      var dataString1 = data.toString('utf8')
+      response.render('stats', {data:obj, search:dataString1});
   })
 });
   

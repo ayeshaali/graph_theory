@@ -42,20 +42,22 @@
       <%}%>
   </table>
 
-  
+  <br>
   <form action="/search" method="get">
-      Search for a senior to check out their vertex degree:<input type="text" id="enter_name_input" name="name"><br>
+      Search for a senior to check out their vertex degree: <input type="text" id="enter_name_input" name="name"><br>
       <button type="submit" id = "enter_name_button">Submit Name</button>
   </form>
-  
   <%if (search!=null) {%>
     <p><%=search%></p>
   <%}%>
-<div>
+</div>
 
-  
-<div>
-  <h2> </h2>
+<div id="graph1">
+  <img src= "/img/figure_1.png"/>
+</div>
+
+<div id="graph2">
+  <img src= "/img/figure_2.png"/>
 </div>
 
   <script>

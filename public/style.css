@@ -111,7 +111,32 @@ a {
   top: 25%;
   font-family: "Raleway", sans-serif; 
   padding-left: 20px;
-  font-size: 12px;
+  font-size: 15px;
+  width: 45%;
+}
+
+#graph1 {
+  position: absolute;
+  left: 46.5%;
+  top: 25%;
+  font-family: "Raleway", sans-serif; 
+  padding-left: 20px;
+  font-size: 15px;
+  width: 25%;
+}
+
+#graph2 {
+  position: absolute;
+  left: 72%;
+  top: 25%;
+  font-family: "Raleway", sans-serif; 
+  padding-left: 20px;
+  font-size: 15px;
+  width: 25%;
+}
+
+img {
+  max-width: 100%;
 }
 
 /* Dropdown */

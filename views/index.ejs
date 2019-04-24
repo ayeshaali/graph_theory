@@ -6,6 +6,7 @@
   <script src="https://d3js.org/d3.v4.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.js"></script>
   <script src="saveSvgAsPng.js"></script>
+  <script src="d3-save-svg.min.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -24,7 +25,7 @@
   
   <button id="reset" class="button" onclick="reload()">Reset</button>
   <a id="stats" class="button" href="/stats">Stats</a>  
-  <button class="button" id='saveButton' onclick="saveSvgAsPng(document.getElementById('<%=String(user)%>'), 'diagram.png')">Export visualization to PNG</button>
+  <button class="button" id='saveButton'>Export visualization to PNG</button>
 
   <div id="info"><h2>Welcome to Trin Analytics!<h2></div>
     
@@ -44,6 +45,20 @@
       $('#info').html("<h2>Welcome to Trin Analytics!<h2>");      
       $('.button').css('top', $("#info").position().top + $("#info").height()+ 30);
       svgFunction("<%=String(user)%>");
+    }
+    
+    var saveSvg = function(svgEl, name) {
+      svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+      var svgData = svgEl.outerHTML;
+      var preface = '<?xml version="1.0" standalone="no"?>\r\n';
+      var svgBlob = new Blob([preface, svgData], {type:"image/svg+xml;charset=utf-8"});
+      var svgUrl = URL.createObjectURL(svgBlob);
+      var downloadLink = document.createElement("a");
+      downloadLink.href = svgUrl;
+      downloadLink.download = name;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
     }
     
     var windowWidth = $(window).width();

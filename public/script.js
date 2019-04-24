@@ -167,6 +167,12 @@ d3.json(json_file, function(error, json) {
 
       node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
     });
+    d3.select('#saveButton').on('click', function() {
+      var config = {
+        filename: 'customFileName',
+      }
+      d3_save_svg.save(d3.select('svg').node(), config);
+    });
   });
 }
 

@@ -106,7 +106,12 @@ var svgFunction = function(json_file) {
           .style("font-size", function(label_d){ return label_d.label === d.label ? 16 : 12 } )
           .style("font-weight", function(label_d){ return label_d.label === d.label ? "bold" : "normal" } )
       });
-
+      d3.select('#saveButton').on('click', function() {
+        var config = {
+          filename: 'customFileName',
+        }
+        d3_save_svg.save(d3.select('svg').node(), config);
+      });
   })
 }
 

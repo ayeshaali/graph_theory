@@ -4,6 +4,7 @@
   "description": "",
   "main": "mvc_server.js",
   "dependencies": {
+    "d3-save-svg": "0.0.2",
     "d3-scale-chromatic": "^1.3.3",
     "ejs": "^2.6.1",
     "express": "^4.16.4",

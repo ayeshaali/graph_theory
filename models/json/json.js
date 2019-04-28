@@ -299,7 +299,8 @@ exports.degree = function(data_file,name) {
   var names = {};
   for (var i = 0; i<data.length; i++){
     var row = data[i].split(",");
-    names[row[0]]=row[1];
+    console.log(row[0].toLowerCase());
+    names[row[0].toLowerCase()]=row[1];
   }
-  return ("Degree of Vertex "+name+": "+names[name]) 
+  return ("Degree of Vertex "+name+": "+names[name.toLowerCase()]) 
 }

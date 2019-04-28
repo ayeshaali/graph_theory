@@ -1,4 +1,5 @@
 var fs = require('fs');
+
 //array of names
 var getNames = function(){
   var data = (fs.readFileSync("../data.csv", "utf8")).split("\n");
@@ -291,4 +292,14 @@ var pythonCourses = function() {
   }
   json+="}"
   fs.writeFileSync("graphCourses.txt", json, "utf8")
+}
+
+exports.degree = function(data_file,name) {
+  var data = (fs.readFileSync(data_file, "utf8")).split("\n");
+  var names = {};
+  for (var i = 0; i<data.length; i++){
+    var row = data[i].split(",");
+    names[row[0]]=row[1];
+  }
+  return ("Degree of Vertex "+name+": "+names[name]) 
 }

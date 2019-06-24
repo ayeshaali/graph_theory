@@ -1,4 +1,4 @@
-# Trin-Analytics
+# Trin Analytics
 
 #### Visualization and Data Analysis Program of Trinity School's Class of 2019
 
